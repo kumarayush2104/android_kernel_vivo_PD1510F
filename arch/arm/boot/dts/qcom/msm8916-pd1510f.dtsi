@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -50,6 +50,7 @@
 		mpu6050@68 { /* Gyroscope and accelerometer sensor combo */
 			compatible = "invn,mpu6050";
 			reg = <0x68>;
+			status = "disabled"
 			pinctrl-names = "mpu_default","mpu_sleep";
 			pinctrl-0 = <&mpu6050_default>;
 			pinctrl-1 = <&mpu6050_sleep>;
@@ -65,6 +66,7 @@
 		avago@39 { /* Ambient light and proximity sensor */
 			compatible = "avago,apds9900";
 			reg = <0x39>;
+			status = "disabled"
 			pinctrl-names = "default","sleep";
 			pinctrl-0 = <&apds99xx_default>;
 			pinctrl-1 = <&apds99xx_sleep>;
@@ -86,6 +88,7 @@
 		akm@c {
 			compatible = "ak,ak8963";
 			reg = <0x0c>;
+			status = "disabled"
 			pinctrl-names = "ak8963_default", "ak8963_sleep";
 			pinctrl-0 = <&ak8963_default>;
 			pinctrl-1 = <&ak8963_sleep>;
