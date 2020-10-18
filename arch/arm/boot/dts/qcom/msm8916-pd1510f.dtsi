@@ -12,7 +12,7 @@
 
 #include "msm8916.dtsi"
 #include "msm8916-pinctrl.dtsi"
-// #include "msm8916-camera-pd1510f.dtsi"
+#include "msm8916-camera-pd1510f.dtsi"
 
 / {
 	aliases {
