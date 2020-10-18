@@ -20,6 +20,25 @@
 	};
 };
 
+&tlmm_pinmux {
+	lis3dh_int1_pin {
+		qcom,pins = <&gp 115>;
+		qcom,num-grp-pins = <1>;
+		label = "lis3dh_int_pin";
+
+		lis3dh_int1_default: int1_default {
+				drive-strength = <6>;
+				bias-pull-down;
+		};
+
+		lis3dh_int1_sleep: int1_sleep {
+				drive-strength = <2>;
+				bias-pull-down;
+		};
+	};
+
+};
+
 &soc {
 	i2c@78b9000 { /* BLSP1 QUP5 */
 		synaptics@20 {
@@ -98,6 +117,42 @@
 			vio-supply = <&pm8916_l6>;
 			ak,layout = <0x6>;
 			ak,auto-report;
+		};
+
+		taos@39 {
+			compatible = "ams,tmd2772";
+			reg = <0x39>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <113 0x2002>;
+			pinctrl-names = "tmd2772_default","tmd2772_sleep";
+			pinctrl-0 = <&apds99xx_default>;
+			pinctrl-1 = <&apds99xx_sleep>;
+			vdd-supply = <&pm8916_l17>;
+			vio-supply = <&pm8916_l6>;
+			ams,irq-gpio = <&msm_gpio 113 0x2002>;
+			ams,pul_cnt = <12>;
+			ams,light-percent = <150>;
+		};
+
+		lis3dh@18 {
+			compatible = "st,lis3dh";
+			reg = <0x18>;
+			pinctrl-names = "lis3dh_default","lis3dh_sleep";
+			pinctrl-0 = <&lis3dh_int1_default>;
+			pinctrl-1 = <&lis3dh_int1_sleep>;
+			interrupt-parent = <&msm_gpio>;
+			vdd-supply = <&pm8916_l17>;
+			vddio-supply = <&pm8916_l6>;
+			st,min-interval = <10>;
+			st,init-interval = <200>;
+			st,axis-map-x = <1>;
+			st,axis-map-y = <0>;
+			st,axis-map-z = <2>;
+			st,g-range = <2>;
+			st,gpio-int1 = <&msm_gpio 115 0x2002>;
+			st,negate-x = <0>;
+			st,negate-y = <0>;
+			st,negate-z = <0>;
 		};
 
 	};
@@ -314,19 +369,18 @@
 	};
 };
 
-#include "dsi-panel-jdi-1080p-video.dtsi"
+#include "dsi-panel-tmotm9605a-qhd-video.dtsi"
 
 &mdss_mdp {
 	qcom,mdss-pref-prim-intf = "dsi";
 };
 
-&dsi_jdi_1080_vid {
+&dsi_tmotm9605a_qhd_video {
 	qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_pwm";
-	qcom,mdss-dsi-bl-pmic-pwm-frequency = <100>;
+	qcom,mdss-dsi-bl-pmic-pwm-frequency = <25>;
 	qcom,mdss-dsi-bl-pmic-bank-select = <0>;
 	qcom,mdss-dsi-pwm-gpio = <&pm8916_mpps 4 0>;
 	qcom,mdss-dsi-pan-enable-dynamic-fps;
-	qcom,mdss-dsi-pan-fps-update = "dfps_immediate_porch_mode";
 };
 
 &pmx_mdss {
@@ -364,7 +418,7 @@
 		qcom,rpull-up-kohm = <100>;
 		qcom,vref-batt-therm = <1800000>;
 
-		#include "batterydata-palladium.dtsi"
+		#include "batterydata-samsung-ds-4v35-2300mah.dtsi"
 	};
 };
 
