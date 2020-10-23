@@ -37,6 +37,58 @@
 		};
 	};
 
+	goodix_ts_int {
+		qcom,pins = <&gp 13>;
+		qcom,pin-func = <0>;
+		qcom,num-grp-pins = <1>;
+		label = "goodix_ts_int";
+
+		gdix_ts_int_default: gdix_ts_int_default {
+			drive-strength = <16>;
+			input-enable;
+			bias-disable;
+		};
+
+		gdix_ts_int_output_high: gdix_ts_int_output_high {
+			output-high;
+		};
+
+		gdix_ts_int_output_low: gdix_ts_int_output_low {
+			output-low;
+		};
+
+		gdix_ts_int_input: gdix_ts_int_input {
+			input-enable;
+			bias-disable;
+		};
+	};
+
+	goodix_ts_rst {
+		qcom,pins = <&gp 12>;
+		qcom,pin-func = <0>;
+		qcom,num-grp-pins = <1>;
+		label = "goodix_ts_rst";
+
+		gdix_ts_rst_default: gdix_ts_rst_default {
+			drive-strength = <16>;
+			input-enable;
+			bias-disable;
+		};
+
+		gdix_ts_rst_output_high: gdix_ts_rst_output_high {
+			output-high;
+		};
+
+		gdix_ts_rst_output_low: gdix_ts_rst_output_low {
+			output-low;
+		};
+
+		gdix_ts_rst_input: gdix_ts_rst_input {
+			input-enable;
+			bias-disable;
+		};
+	};
+
 };
 
 &soc {
@@ -47,14 +99,59 @@
 			status = "disabled";
 	};
 
+	gt9xx-i2c@14 {
+			compatible = "goodix,gt9xx";
+			reg = <0x14>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <13 0x2800>;
+			pinctrl-names = "gdix_ts_int_default",
+				"gdix_ts_int_output_low",
+				"gdix_ts_int_output_high",
+				"gdix_ts_int_input",
+				"gdix_ts_rst_default",
+				"gdix_ts_rst_output_low",
+				"gdix_ts_rst_output_high",
+				"gdix_ts_rst_input";
+			pinctrl-0 = <&gdix_ts_int_default>;
+			pinctrl-1 = <&gdix_ts_int_output_low>;
+			pinctrl-2 = <&gdix_ts_int_output_high>;
+			pinctrl-3 = <&gdix_ts_int_input>;
+			pinctrl-4 = <&gdix_ts_rst_default>;
+			pinctrl-5 = <&gdix_ts_rst_output_low>;
+			pinctrl-6 = <&gdix_ts_rst_output_high>;
+			pinctrl-7 = <&gdix_ts_rst_input>;
+			reset-gpios = <&msm_gpio 12 0x00>;
+			irq-gpios = <&msm_gpio 13 0x2800>;
+			irq-flags = <1>;
+			vdd_ana-supply = <&pm8916_l16>;
+			vcc_i2c-supply = <&pm8916_l6>;
+			touchscreen-max-id = <11>;
+			touchscreen-size-x = <540>;
+			touchscreen-size-y = <960>;
+			touchscreen-max-w = <512>;
+			touchscreen-max-p = <512>;
+			touchscreen-key-map = <158>, <102>, <139>; /*KEY_BACK=158，KEY_HOMEPAGE=102, KEY_MENU=139*/
+			goodix,slide-wakeup = <1>;
+			goodix,type-a-report = <0>;
+			goodix,driver-send-cfg = <1>;
+			goodix,resume-in-workqueue = <0>;
+			goodix,int-sync = <1>;
+			goodix,swap-x2y = <0>;
+			goodix,esd-protect = <1>;
+			goodix,auto-update = <0>;
+			goodix,auto-update-cfg = <0>;
+			goodix,power-off-sleep = <0>;
+			goodix,pen-suppress-finger = <0>;
+		};
+
 	gen-vkeys {
 		compatible = "qcom,gen-vkeys";
-		label = "synaptics_rmi4_i2c";
-		qcom,disp-maxx = <1079>;
-		qcom,disp-maxy = <1919>;
-		qcom,panel-maxx = <1079>;
-		qcom,panel-maxy = <2084>;
-		qcom,key-codes = <158 139 172 217>;
+		label = "gt9xx-ts";
+		qcom,disp-maxx = <540>;
+		qcom,disp-maxy = <960>;
+		qcom,panel-maxx = <540>;
+		qcom,panel-maxy = <1030>;
+		qcom,key-codes = <158 102 139>;
 	};
 
 	i2c@78ba000 { /* BLSP1 QUP6 */
