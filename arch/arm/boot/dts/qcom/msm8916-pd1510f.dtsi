@@ -92,6 +92,50 @@
 };
 
 &soc {
+	i2c@78b8000 {
+		smb358_otg_vreg: smb358-charger@57 {
+			compatible = "qcom,smb358-charger";
+			reg = <0x57>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <62 8>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&smb_int_default>;
+
+			qcom,float-voltage-mv = <4360>;
+			qcom,recharge-mv = <100>;
+			qcom,recharge-disabled;
+			regulator-name = "smb358_otg_vreg";
+			qcom,thermal-mitigation = <1300 700 600 0>;
+			qcom,fastchg-current-max-ma = <1300>;
+
+			qcom,disable-apsd;
+			qcom,bms-psy-name = "bms";
+			/* qcom,iterm-disabled; */
+			qcom,iterm-ma = <150>;
+			qcom,bms-controlled-charging;
+			qcom,chg-inhibit-disabled;
+			qcom,chg-vadc = <&pm8916_vadc>;
+			qcom,chg-adc_tm = <&pm8916_adc_tm>;
+			/* qcom,vcc-i2c-supply = <&pm8916_l5>; */
+			qcom,irq-gpio = <&msm_gpio 62 0x00>;
+
+			qcom,using-pmic-therm;
+			qcom,hot-bat-decidegc = <550>;
+			qcom,cold-bat-decidegc = <0>;
+			qcom,bat-present-decidegc = <200>;
+			/*
+			 * Below properties are used for enable JEITA
+			 */
+			qcom,warm-bat-decidegc = <450>;
+			qcom,cool-bat-decidegc = <0>;
+			qcom,warm-bat-ma = <1000>;
+			qcom,cool-bat-ma = <1000>;
+			qcom,warm-bat-mv = <4000>;
+			qcom,cool-bat-mv = <4000>;
+			status = "ok";
+		};
+	};
+
 	i2c@78b9000 { /* BLSP1 QUP5 */
 		synaptics@20 {
 			compatible = "synaptics,rmi4";
